@@ -17,7 +17,6 @@ function App() {
   const { user } = useAuth();
   const {mode,setModeByUser} = useUIMode();
   setAxiosDefault()
-  // socket.connect()
   if (user?.token) setToken(user.token)
   return (
     <React.Suspense

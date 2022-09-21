@@ -1,5 +1,7 @@
 export default function Pinned(){
     return(
-        <div></div>
+        <div className="grid w-fit h-fit">
+
+        </div>
     )
 }

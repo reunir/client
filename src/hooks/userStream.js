@@ -31,7 +31,6 @@ import { useState } from "react";
     }
     const toggleCamera = async () => {
         let localvideoTrack = localStream.getTracks().find(track => track.kind==='video')
-        console.log(localStream);
         if(localvideoTrack.enabled){
             localvideoTrack.enabled = false;
             setVideoTrack(false)
