@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Inter";
+  src: local("Inter"),
+   url("../fonts/Inter/Inter-Regular.ttf") format("truetype");
+  font-weight: 500;
+  }
+
+#root{
+  display: grid;
+  width: 100vw;
+  user-select: none;
+  height: 100vh;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  
