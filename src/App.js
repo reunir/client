@@ -11,6 +11,7 @@ import NotFound from './pages/404';
 const Signup = React.lazy(() => import('./pages/Signup'));
 const Meet = React.lazy(() => import('./pages/Meet'));
 const Login = React.lazy(() => import('./pages/Login'))
+const Redirect = React.lazy(() => import('./pages/Redirect'))
 const Home = React.lazy(() => import('./pages/Home'))
 
 function App() {
@@ -24,15 +25,22 @@ function App() {
         <div><Loading /></div>
       }
     >
+      {/* {!user?
       <Routes>
-        <Route exact path='/' element={<Landing />} />
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
+        <Route path='*' element={<Redirect/>}/>
+      </Routes>
+      : */}
+      <Routes>
+        <Route exact path='/' element={<Landing />} />
         <Route path='/h' element={<Home/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/signup' element={<Signup/>}/>
         <Route path='/meet/:id' element={<Meet/>}/>
         <Route path='*' element={<NotFound/>}/>
       </Routes>
-
+      {/* } */}
     </React.Suspense>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import ModeSwitcher from "../components/ModeSwitcher";
 import {ChatbubbleEllipses} from '@styled-icons/ionicons-sharp'
 import {PeopleTeam} from '@styled-icons/fluentui-system-filled'
@@ -10,7 +10,12 @@ import useStreamInit from "../hooks/userStream";
 import { MeetProvider } from "../context/meet-context";
 import { useEffect } from "react";
 import useMeetSocketServer from "../hooks/meetSocket";
+import { useAuth } from "../context/auth-context";
 export default function Meet(){
+    const { user } = useAuth();
+     if(user===undefined){
+        useNavigate("/login")
+     }
     const {id} = useParams();
     const [rightNav,setRightNav] = useState(0);
     const setRightNavHelper = (what) => {
@@ -19,9 +24,12 @@ export default function Meet(){
         else
             setRightNav(what);
     }
-    const {error,videoTrack,audioTrack,initStream,toggleAudio,toggleCamera} = useStreamInit();
+    const {error,videoTrack,audioTrack,initStream,finishStream,toggleAudio,toggleCamera} = useStreamInit();
     useEffect(()=>{
         initStream("chitwan001@gmail.com-video");
+        return()=>{
+            finishStream();
+        }
     },[])
     const {me,sendRequest} = useMeetSocketServer();
     const participants = [{id:'abhinavvsinhaa@gmail.com',name:'Abhinav Sinha'},{id:'armaanbgp@gmail.com',name:'Rhythm Shandlya'}]

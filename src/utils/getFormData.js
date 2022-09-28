@@ -6,3 +6,7 @@ export function handleFormSubmit(fn){
         return fn(formJSON);
     }
 }
+export function getFormData(formData){
+    var formJSON = Object.fromEntries(formData.entries());
+    return formJSON
+}

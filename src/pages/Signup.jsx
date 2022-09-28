@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/auth-context";
 import SignupHelper from "./Signup/SignupHelper";
 
 export default function Signup(){
@@ -10,6 +12,10 @@ export default function Signup(){
         setwhichPart(nextPart);
         setpercentageCompleted(parseInt((nextPart)/3*100))
     }
+    const { user } = useAuth();
+     if(user){
+        <Navigate to="/h" replace={true}/>
+     }
     return(
         <div className="grid place-content-center bg-[#F9FAFB]">
             <div className="grid bg-white rounded-md w-full lg:w-[700px]">

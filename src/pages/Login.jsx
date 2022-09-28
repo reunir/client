@@ -2,6 +2,7 @@ import { Apple } from "@styled-icons/fa-brands";
 import Google from '../assets/google.webp';
 import Lottie from "react-lottie";
 import loading from '../assets/login-anim.json'
+import { getFormData } from "../utils/getFormData";
 export default function Login(){
     const defaultOptions = {
         loop: true,
@@ -13,6 +14,11 @@ export default function Login(){
            preserveAspectRatio: "xMidYMid slice",
         },
      };
+     const formSubmit = (e) => {
+        e.preventDefault();
+        const formData = getFormData(new FormData(e.target));
+        console.log(formData)
+     }
     return(
         <div className="grid lg:grid-cols-[1.5fr_1fr] bg-[#F9FAFB]">
             <div className="hidden lg:grid place-content-center">
@@ -45,14 +51,14 @@ export default function Login(){
                         <div className="px-[20px] text-[#1C64F2]">or</div>
                         <div className="h-[1px] w-full border-t-2 border-[#9f9f9f5e] place-self-center"></div>
                     </div>
-                    <div className="grid grid-flow-row">
+                    <form onSubmit={formSubmit} className="grid grid-flow-row">
                         <div className="grid grid-rows-[auto_1fr] gap-[5px] pb-[20px]">
                             <div className="font-medium tracking-wider text-sm leading-5 text-black">Email</div>
-                            <input type="email" name="email" className="text-sm outline-[#1C64F2] border border-gray-300 bg-[#F9FAFB] rounded-md p-[10px]" id="email" placeholder="Enter your email" />
+                            <input type="email" required name="email" className="text-sm outline-[#1C64F2] border border-gray-300 bg-[#F9FAFB] rounded-md p-[10px]" id="email" placeholder="Enter your email" />
                         </div>
                         <div className="grid grid-rows-[auto_1fr] gap-[5px] pb-[20px]">
                             <div className="font-medium tracking-wider text-sm leading-5 text-black">Password</div>
-                            <input type="password" name="pass" className="text-sm outline-[#1C64F2] border border-gray-300 bg-[#F9FAFB] rounded-md p-[10px]" id="pass" placeholder="•••••••" />
+                            <input type="password" required name="pass" className="text-sm outline-[#1C64F2] border border-gray-300 bg-[#F9FAFB] rounded-md p-[10px]" id="pass" placeholder="•••••••" />
                         </div>
                         <div className="grid grid-flow-col gap-[5px] pb-[20px]">
                             <div className="grid grid-cols-[auto_1fr] gap-[9px] place-content-start">
@@ -63,10 +69,10 @@ export default function Login(){
                                 Forgot password?
                             </div>
                         </div>
-                        <div className="grid py-[10px] place-content-center font-semibold text-sm rounded-md cursor-pointer hover:bg-[#164fc1] text-white bg-[#1C64F2]">
+                        <button type="submit" className="grid py-[10px] place-content-center font-semibold text-sm rounded-md cursor-pointer hover:bg-[#164fc1] text-white bg-[#1C64F2]">
                             Sign in to your account
-                        </div>
-                    </div>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

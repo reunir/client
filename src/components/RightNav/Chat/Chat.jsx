@@ -30,7 +30,7 @@ export default function Chat(){
             language: 'en-US',
             timeAndDate: new Date()
         })
-        sendRequest("sendChat",{
+        sendRequest("send_chat",{
             senderName: 'Chitwan Bindal',
             senderProfile:'',
             senderEmail:'chitwan001@gmail.com',

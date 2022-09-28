@@ -31,6 +31,11 @@ import { useState } from "react";
                 setAudioTrack(false)
             }
     }
+    const finishStream = () => {
+        localStream?.getTracks().forEach(track => {
+            track.stop();
+        });
+    }
     const toggleCamera = async () => {
         let localvideoTrack = localStream.getTracks().find(track => track.kind==='video')
         if(localvideoTrack.enabled){
@@ -51,6 +56,6 @@ import { useState } from "react";
             setAudioTrack(false)
         }
     }
-    return {initStream,error,videoTrack,audioTrack,toggleAudio,toggleCamera}
+    return {initStream,finishStream,error,videoTrack,audioTrack,toggleAudio,toggleCamera}
 }
 export default useStreamInit;
