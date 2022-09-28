@@ -9,6 +9,7 @@ import VideoControls from "../components/VideoControls";
 import useStreamInit from "../hooks/userStream";
 import { MeetProvider } from "../context/meet-context";
 import { useEffect } from "react";
+import useMeetSocketServer from "../hooks/meetSocket";
 export default function Meet(){
     const {id} = useParams();
     const [rightNav,setRightNav] = useState(0);
@@ -22,7 +23,8 @@ export default function Meet(){
     useEffect(()=>{
         initStream("chitwan001@gmail.com-video");
     },[])
-const participants = [{id:'abhinavvsinhaa@gmail.com',name:'Abhinav Sinha'},{id:'armaanbgp@gmail.com',name:'Rhythm Shandlya'}]
+    const {me,sendRequest} = useMeetSocketServer();
+    const participants = [{id:'abhinavvsinhaa@gmail.com',name:'Abhinav Sinha'},{id:'armaanbgp@gmail.com',name:'Rhythm Shandlya'}]
     return(
         <div className="bg-[#f0f0f0] dark:bg-gray-800 relative">
             <div className="static grid grid-flow-col pr-[10px] lg:pr-0 lg:grid-cols-[3fr_12fr_1fr_1fr] grid-cols-[2fr_1fr_1fr] top-0 left-0 w-full lg:h-[80px] h-[60px] bg-slate-100 dark:bg-gray-700">
@@ -35,7 +37,7 @@ const participants = [{id:'abhinavvsinhaa@gmail.com',name:'Abhinav Sinha'},{id:'
                     CB
                 </div>
             </div>
-            <MeetProvider value={{participants}}>
+            <MeetProvider value={{participants,sendRequest}}>
             <div className="grid h-[calc(100%-140px)] lg:h-[calc(100%-180px)] gap-[10px] grid-cols-[1fr_auto]">
                 <MainVideo videoTrack={videoTrack} audioTrack={audioTrack} error={error} />
                 <RightNav what={rightNav}/>

@@ -16,6 +16,8 @@ import { useState } from "react";
                     setVideoTrack(true)
                     setAudioTrack(true)
                     document.getElementById(id).srcObject = stream;
+                    document.getElementById(id).volume = 0;
+                    document.getElementById(id).muted = 0;
                     setError(0);
               }).catch((err)=> {
                 console.error(err);

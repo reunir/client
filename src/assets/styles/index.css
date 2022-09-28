@@ -9,6 +9,11 @@
   font-weight: 500;
   }
 
+video{
+  width: 100% !important;
+  height: auto !important;
+}
+
 #root{
   display: grid;
   width: 100vw;

@@ -2,32 +2,16 @@ import { useEffect } from "react"
 import dateFormat, { masks } from "dateformat";
 import { useState } from "react";
 import { ArrowReply } from "@styled-icons/fluentui-system-filled";
+import React from "react";
+import { MeetContext } from "../../../context/meet-context";
+import useMeetDataHandler from "../../../hooks/meetDataHandler";
 export default function Chat(){
     useEffect(() => {
         return () => {
         }
       }, [])
-    const [chats,setChats] = useState([{
-        senderName: 'Abhinav Sinha',
-        senderProfile: '',
-        senderEmail:'abhinavvsinhaa@gmail.com',
-        text: 'Hi there!',
-        inReplyTo: -1,
-        reacts: [],
-        type: 'text',
-        language: 'en-US',
-        timeAndDate: new Date()
-    },{
-        senderName: 'Chitwan Bindal',
-        senderProfile: '',
-        senderEmail:'chitwan001@gmail.com',
-        text: 'Hello Abhinav!',
-        inReplyTo: 0,
-        reacts: [],
-        type: 'text',
-        language: 'en-US',
-        timeAndDate: new Date()
-    }]);
+    let {sendRequest} = React.useContext(MeetContext);
+    const {chats,newChat} = useMeetDataHandler();
     const [replyTo,setReplyTo] = useState(-1);
     const convertToLocale = (date) => {
         return dateFormat(date,'shortTime');
@@ -35,7 +19,7 @@ export default function Chat(){
     const sendMessage = () => {
         let message = document.getElementById('newChat').value;
         if(message!==''){
-        setChats(current => [...current,{
+        newChat({
             senderName: 'Chitwan Bindal',
             senderProfile:'',
             senderEmail:'chitwan001@gmail.com',
@@ -45,7 +29,18 @@ export default function Chat(){
             type: 'text',
             language: 'en-US',
             timeAndDate: new Date()
-        }])
+        })
+        sendRequest("sendChat",{
+            senderName: 'Chitwan Bindal',
+            senderProfile:'',
+            senderEmail:'chitwan001@gmail.com',
+            text: message,
+            inReplyTo: replyTo,
+            reacts: [],
+            type: 'text',
+            language: 'en-US',
+            timeAndDate: new Date()
+        })
         document.getElementById('newChat').value='';
         document.getElementById('newChat').focus();
         let scrollToBottom = document.getElementById('chat-scrollbar');
