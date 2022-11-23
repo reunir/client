@@ -3,6 +3,7 @@ import { useState } from "react";
 
 const useMeetDataHandler = () => {
     const [allParticipants,setallParticipants] = useState(new Map());
+    const [meetId,setMeetId] = useState(null);
     const [pinnedParticipant,setPinnedParticipant] = useState(null);
     const [renderedParticipants, setRenderedParticipants] = useState(null);
     const [chats,setChats] = useState([{
@@ -37,7 +38,8 @@ const useMeetDataHandler = () => {
     }
 
     const newChat = (data) => {
-        setChats(curr=> [...curr, data]);
+        const newArr = [...chats,data];
+        setChats(newArr);
     }
 
     const removeParticipant = (socketId) => {
@@ -53,6 +55,6 @@ const useMeetDataHandler = () => {
         setPinnedParticipant(null);
     }
 
-    return { chats, newChat,previousChat, newParticipant, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant }
+    return { chats, setMeetId, meetId, newChat,previousChat, newParticipant, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant }
 }
 export default useMeetDataHandler;

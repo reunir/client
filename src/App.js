@@ -10,6 +10,7 @@ import NotFound from './pages/404';
 
 const Signup = React.lazy(() => import('./pages/Signup'));
 const Meet = React.lazy(() => import('./pages/Meet'));
+const HomeMeet = React.lazy(() => import('./pages/HomeMeet'));
 const Login = React.lazy(() => import('./pages/Login'))
 const Redirect = React.lazy(() => import('./pages/Redirect'))
 const Home = React.lazy(() => import('./pages/Home'))
@@ -37,6 +38,7 @@ function App() {
         <Route path='/h' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
+        <Route path='/meet' element={<HomeMeet/>}/>
         <Route path='/meet/:id' element={<Meet/>}/>
         <Route path='*' element={<NotFound/>}/>
       </Routes>

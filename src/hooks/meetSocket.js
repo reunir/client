@@ -8,14 +8,14 @@ const listenRequest = (event) => {
     })
 }
 
- const sendRequest =  (event,data) => {
+const sendRequest =  (event,data) => {
     socket.emit(event,data);
 }
 
 
 const useMeetSocketServer = () => {
     const [me,setMe] = useState("");
-    const {newParticipant, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant,newChat,previousChat} = useMeetDataHandler();
+    const {newParticipant,meetId, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant,newChat,previousChat} = useMeetDataHandler();
     useEffect(()=>{
         setMe(listenRequest('me')); // setting socket id
         socket.on("newparticipant",(args)=>{
@@ -30,6 +30,6 @@ const useMeetSocketServer = () => {
     },[])
     // socket.on()
     
-    return {me , sendRequest};
+    return {me};
 }
-export default useMeetSocketServer;
+export {useMeetSocketServer,sendRequest};

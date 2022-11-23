@@ -9,8 +9,9 @@ import VideoControls from "../components/VideoControls";
 import useStreamInit from "../hooks/userStream";
 import { MeetProvider } from "../context/meet-context";
 import { useEffect } from "react";
-import useMeetSocketServer from "../hooks/meetSocket";
+import {useMeetSocketServer,sendRequest} from "../hooks/meetSocket";
 import { useAuth } from "../context/auth-context";
+import useMeetDataHandler from "../hooks/meetDataHandler";
 export default function Meet(){
     const { user } = useAuth();
      if(user===undefined){
@@ -25,13 +26,15 @@ export default function Meet(){
             setRightNav(what);
     }
     const {error,videoTrack,audioTrack,initStream,finishStream,toggleAudio,toggleCamera} = useStreamInit();
+    const {setMeetId} = useMeetDataHandler();
     useEffect(()=>{
+        sendRequest("checkMeeting",{id:id});
         initStream("chitwan001@gmail.com-video");
         return()=>{
             finishStream();
         }
     },[])
-    const {me,sendRequest} = useMeetSocketServer();
+    const {me} = useMeetSocketServer();
     const participants = [{id:'abhinavvsinhaa@gmail.com',name:'Abhinav Sinha'},{id:'armaanbgp@gmail.com',name:'Rhythm Shandlya'}]
     return(
         <div className="bg-[#f0f0f0] dark:bg-gray-800 relative">
