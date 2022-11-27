@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@styled-icons/entypo": "^10.46.0",
     "@styled-icons/fa-brands": "^10.38.0",
     "@styled-icons/fluentui-system-filled": "^10.46.0",
     "@styled-icons/ionicons-sharp": "^10.46.0",
@@ -12,12 +13,17 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "dateformat": "^5.0.3",
+    "html-react-parser": "^3.0.4",
+    "randomstring": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.39.6",
     "react-lottie": "^1.2.3",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.6",
     "socket.io-client": "^4.5.1",
+    "use-clippy": "^1.0.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

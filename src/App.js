@@ -17,7 +17,7 @@ const Home = React.lazy(() => import('./pages/Home'))
 
 function App() {
   const { user } = useAuth();
-  const {mode,setModeByUser} = useUIMode();
+  const { mode, setModeByUser } = useUIMode();
   setAxiosDefault()
   if (user?.token) setToken(user.token)
   return (
@@ -26,23 +26,23 @@ function App() {
         <div><Loading /></div>
       }
     >
-      {/* {!user?
-      <Routes>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/signup' element={<Signup/>}/>
-        <Route path='*' element={<Redirect/>}/>
-      </Routes>
-      : */}
-      <Routes>
-        <Route exact path='/' element={<Landing />} />
-        <Route path='/h' element={<Home/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/signup' element={<Signup/>}/>
-        <Route path='/meet' element={<HomeMeet/>}/>
-        <Route path='/meet/:id' element={<Meet/>}/>
-        <Route path='*' element={<NotFound/>}/>
-      </Routes>
-      {/* } */}
+      {!user ?
+        <Routes>
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='*' element={<Redirect />} />
+        </Routes>
+        :
+        <Routes>
+          <Route exact path='/' element={<Landing />} />
+          <Route path='/h' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/meet' element={<HomeMeet />} />
+          <Route path='/meet/:id' element={<Meet />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      }
     </React.Suspense>
   );
 }

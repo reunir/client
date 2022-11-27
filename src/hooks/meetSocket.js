@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useAuth } from "../context/auth-context";
 import socket from "../utils/socket";
 import useMeetDataHandler from "./meetDataHandler";
 const listenRequest = (event) => {
@@ -13,19 +14,20 @@ const sendRequest =  (event,data) => {
 }
 
 
-const useMeetSocketServer = () => {
-    const [me,setMe] = useState("");
+const useMeetSocketServer = (addNotification) => {
+    const [me,setMe] = useState("chitwan001@gmail.com");
     const {newParticipant,meetId, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant,newChat,previousChat} = useMeetDataHandler();
     useEffect(()=>{
-        setMe(listenRequest('me')); // setting socket id
-        socket.on("newparticipant",(args)=>{
-            newParticipant(args);
-        });
+        addNotification({status:1,error:{},success:{data:"",message:"Hi there it is a notification!"}});
         socket.on('removeparticipant',(args)=>{
             removeParticipant(args.socketId);
         });
         socket.on("receiveChat",(args)=>{
             newChat(args);
+        })
+        socket.on('user_connected',(args)=>{
+            console.log(args);
+            newParticipant(args);
         })
     },[])
     // socket.on()

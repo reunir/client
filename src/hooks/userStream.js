@@ -11,7 +11,6 @@ import { useState } from "react";
                 height: { min: 480, ideal: 1080, max: 1080 }
               },
               audio: true}).then((stream) => {
-                console.log(stream);
                     setLocalStream(stream);
                     setVideoTrack(true)
                     setAudioTrack(true)
@@ -56,6 +55,14 @@ import { useState } from "react";
             setAudioTrack(false)
         }
     }
-    return {initStream,finishStream,error,videoTrack,audioTrack,toggleAudio,toggleCamera}
+    const createOffer = async () => {
+        let peerConnection = new RTCPeerConnection();
+        let remoteStream = new MediaStream();
+        // video tag
+        let offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        console.log(offer);
+    }
+    return {initStream,finishStream,localStream,createOffer,error,videoTrack,audioTrack,toggleAudio,toggleCamera}
 }
 export default useStreamInit;
