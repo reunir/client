@@ -5,23 +5,32 @@ const sprites = [
     'female',
     'human',
     'identicon',
-    'initials',
     'bottts',
     'avataaars',
     'jdenticon',
     'gridy',
     'micah'
 ]
-
-const generateOrGetAvatar = async () => {
-    if (sessionStorage.getItem(window.btoa("reunir-user-avatar"))) {
-        return sessionStorage.getItem(window.btoa("reunir-user-avatar"));
-    } else {
+const getColorCode = () => {
+    var makeColorCode = '0123456789ABCDEFabcdef';
+    var code = '';
+    for (var count = 0; count < 8; count++) {
+       code =code+ makeColorCode[Math.floor(Math.random() * 16)];
+    }
+    return code;
+ }
+const generateNewAvatar = async () => {
         const stripe = sprites[Math.floor(Math.random() * sprites.length)];
         const seed = (await axios.get("https://random-word-api.herokuapp.com/word")).data[0];
-        const avatar = await axios.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%230000ff`);
-        sessionStorage.setItem(window.btoa("reunir-user-avatar"),avatar.data);
-        return avatar.data;
-    }
+        const randomColor = getColorCode();
+        const avatar = await axios.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%23${randomColor}`);
+        return {avatar:avatar.data,stripe,seed,randomColor};
 }
-export default generateOrGetAvatar
+const getUserAvatar = () => {
+    return sessionStorage.getItem(window.btoa("reunir-user-avatar")) || null;
+}
+const setUserAvatar = async ({stripe,seed,backgroundColor}) => {
+        const avatar = await axios.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%23${backgroundColor}`);
+        sessionStorage.setItem(window.btoa("reunir-user-avatar"),avatar.data);
+}
+export {generateNewAvatar,getUserAvatar,setUserAvatar}

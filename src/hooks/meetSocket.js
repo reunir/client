@@ -15,7 +15,8 @@ const sendRequest =  (event,data) => {
 
 
 const useMeetSocketServer = (addNotification) => {
-    const [me,setMe] = useState("chitwan001@gmail.com");
+    const {user} = useAuth();
+    const [me,setMe] = useState(user.user.id);
     const {newParticipant,meetId, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant,newChat,previousChat} = useMeetDataHandler();
     useEffect(()=>{
         addNotification({status:1,error:{},success:{data:"",message:"Hi there it is a notification!"}});
