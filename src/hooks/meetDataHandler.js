@@ -30,9 +30,8 @@ const useMeetDataHandler = () => {
     }]);
     const newParticipant = (data) => {
         setallParticipants(
-           new Map([...allParticipants,[data.userId,data.userData]])
+           new Map([...allParticipants,[data.userData]])
         )
-        console.log(data)
         setParticipantCount(data.participants);
     }
 
@@ -58,6 +57,6 @@ const useMeetDataHandler = () => {
     const removePinnedParticipant = () => {
         setPinnedParticipant(null);
     }
-    return { chats, totalParticipants: participantCount , setMeetId, meetId, newChat,previousChat, newParticipant, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant }
+    return { chats, totalParticipants: participantCount, setParticipantCount , setMeetId, meetId, newChat,previousChat, newParticipant, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant }
 }
 export default useMeetDataHandler;

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { axiosExternal } from '../axiosDefault';
+import { privateGetRequest } from './privateAxios';
 
 const sprites = [
     'male',
@@ -27,10 +29,10 @@ const generateNewAvatar = async () => {
         return {avatar:avatar.data,stripe,seed,randomColor};
 }
 const getUserAvatar = () => {
-    return sessionStorage.getItem(window.btoa("reunir-user-avatar")) || null;
+    return sessionStorage.getItem(window.btoa("reunir-user-avatar")) || "";
 }
 const setUserAvatar = async ({stripe,seed,backgroundColor}) => {
-        const avatar = await axios.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%23${backgroundColor}`);
-        sessionStorage.setItem(window.btoa("reunir-user-avatar"),avatar.data);
+    const avtr = await axiosExternal.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%23${backgroundColor}`)
+    sessionStorage.setItem(window.btoa("reunir-user-avatar"),avtr.data);
 }
 export {generateNewAvatar,getUserAvatar,setUserAvatar}

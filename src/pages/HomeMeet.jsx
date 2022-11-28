@@ -1,8 +1,11 @@
 import { Video } from "@styled-icons/fluentui-system-filled";
 import randomstring from 'randomstring';
-import { useState } from "react";
-import PuffLoader from 'react-spinners/PuffLoader'
+import { useState,useEffect } from "react";
+import { sendRequest } from "../hooks/meetSocket";
+import { useOutletContext } from "react-router-dom";
+import Loading from "../components/Loading";
 export default function HomeMeet() {
+    const [me,addNotification] = useOutletContext();
     const generateMeetId = () => {
         const meetId = randomstring.generate({
             length: 3,
@@ -19,24 +22,22 @@ export default function HomeMeet() {
                 charset: 'alphabetic',
                 capitalization: "lowercase"
             });
-        console.log(meetId);
+        return meetId;
     }
     const joinMeetAndRedirect = () => {
-        const meetId = generateMeetId();
+        const roomId = generateMeetId();
         setLoading(true);
+        sendRequest("create",{roomId,userId:me._id,type:0})
     }
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        setLoading(false);
+    },[me])
     return (
         <>
             {
                 loading ?
-                <div className="grid bg-black place-content-center">
-                    <div className="grid grid-cols-[1fr_auto] tracking-wider text-[#808080] font-medium font-inter text-4xl">
-                        <div className="grid">
-                            <PuffLoader size={150} color="gray"/>
-                        </div>
-                    </div>
-                </div>
+                <Loading/>
             :
                     <div className="grid">
                         <div className="grid relative place-self-center w-full h-full bg-slate-200">
@@ -44,7 +45,7 @@ export default function HomeMeet() {
                                 reunir
                             </div>
                             <div className="grid grid-rows-[auto_1fr] place-self-center">
-                                <button onClick={joinMeetAndRedirect} type="button" class="gap-[5px] px-6 pt-2.5 pb-2 bg-blue-600 text-white font-medium text-xs leading-normal uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex align-center">
+                                <button onClick={joinMeetAndRedirect} type="button" className="gap-[5px] px-6 pt-2.5 pb-2 bg-blue-600 text-white font-medium text-xs leading-normal uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex align-center">
                                     <Video width={'20px'} />
                                     Create Meet
                                 </button>

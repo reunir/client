@@ -7,7 +7,8 @@ import React, { useEffect } from 'react'
 import Loading from './components/Loading'
 import Landing from './pages/Landing';
 import NotFound from './pages/404';
-import { getUserAvatar, setUserAvatar } from './utils/generateAvatar';
+import MeetNav from './components/MeetNav';
+import Me from './components/Me';
 
 const Signup = React.lazy(() => import('./pages/Signup'));
 const Meet = React.lazy(() => import('./pages/Meet'));
@@ -20,11 +21,6 @@ function App() {
   const { user } = useAuth();
   const { mode, setModeByUser } = useUIMode();
   setAxiosDefault()
-  if(user){
-    console.log(user);
-    if(getUserAvatar()===null)
-      setUserAvatar(user.user)
-  }
   if (user?.token) setToken(user.token)
   return (
     <React.Suspense
@@ -40,13 +36,17 @@ function App() {
         </Routes>
         :
         <Routes>
-          <Route exact path='/' element={<Landing />} />
-          <Route path='/h' element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/meet' element={<HomeMeet />} />
-          <Route path='/meet/:id' element={<Meet />} />
-          <Route path='*' element={<NotFound />} />
+          <Route element={<Me/>}>
+            <Route exact path='/' element={<Landing />} />
+            <Route path='/h' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
+            <Route element={<MeetNav />}>
+              <Route path='/meet' element={<HomeMeet />} />
+              <Route path='/meet/:id' element={<Meet />} />
+            </Route>
+            <Route path='*' element={<NotFound />} />
+          </Route>
         </Routes>
       }
     </React.Suspense>

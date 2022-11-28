@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { useContext, useState } from "react";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import ModeSwitcher from "../components/ModeSwitcher";
 import { ChatbubbleEllipses } from '@styled-icons/ionicons-sharp'
 import { PeopleTeam } from '@styled-icons/fluentui-system-filled'
@@ -7,20 +7,18 @@ import RightNav from "../components/RightNav/RightNav";
 import MainVideo from "../components/Video/MainVideo";
 import VideoControls from "../components/VideoControls";
 import useStreamInit from "../hooks/userStream";
-import { MeetProvider } from "../context/meet-context";
 import { useEffect } from "react";
-import { useMeetSocketServer, sendRequest } from "../hooks/meetSocket";
+import {sendRequest } from "../hooks/meetSocket";
 import { useAuth } from "../context/auth-context";
-import useMeetDataHandler from "../hooks/meetDataHandler";
 import Avatar from "../components/Avatar";
-import Notification from "../components/Notification";
-import useNotificationHandler from "../hooks/handleNotifications";
 import ShareDetails from "../components/ShareDetails";
+import { MeetContext, MeetProvider } from "../context/meet-context";
 export default function Meet() {
     const { user } = useAuth();
     if (user === undefined) {
         useNavigate("/login")
     }
+    const [me, addNotification, participants, sendRequest, totalParticipants, newParticipant] = useOutletContext();
     const { id } = useParams();
     const [rightNav, setRightNav] = useState(0);
     const setRightNavHelper = (what) => {
@@ -30,18 +28,16 @@ export default function Meet() {
             setRightNav(what);
     }
     const { error, videoTrack, createOffer, localStream, audioTrack, initStream, finishStream, toggleAudio, toggleCamera } = useStreamInit();
-    const { setMeetId, totalParticipants, newParticipant } = useMeetDataHandler();
-    const { notification, addNotification, deleteAfterExpiryTime } = useNotificationHandler();
-    const { me } = useMeetSocketServer(addNotification);
     useEffect(() => {
-        sendRequest("join_room", { roomId: 'axy-dfg', userId: me });
+        if(me != {}){
+        sendRequest("join_room", { roomId: id, userId: me._id });
         initStream("chitwan001@gmail.com-video");
-        createOffer();
+        // createOffer();
+        }
         return () => {
             finishStream();
         }
     }, [])
-    const participants = [{ id: 'abhinavvsinhaa@gmail.com', name: 'Abhinav Sinha' }, { id: 'armaanbgp@gmail.com', name: 'Rhythm Shandlya' }]
     return (
         <div className="bg-[#f0f0f0] dark:bg-gray-800 relative">
             <div className="static grid grid-flow-col pr-[10px] lg:pr-0 lg:grid-cols-[3fr_11fr_1fr_1fr_1fr] grid-cols-[2fr_1fr_1fr] top-0 left-0 w-full lg:h-[80px] h-[60px] bg-slate-100 dark:bg-gray-700">
@@ -59,7 +55,7 @@ export default function Meet() {
                     <Avatar />
                 </div>
             </div>
-            <MeetProvider value={{ participants, sendRequest, localStream }}>
+            <MeetProvider value={{ localStream,sendRequest, participants }}>
                 <div className="grid h-[calc(100%-140px)] lg:h-[calc(100%-180px)] gap-[10px] grid-cols-[1fr_auto]">
                     <MainVideo videoTrack={videoTrack} audioTrack={audioTrack} error={error} />
                     <RightNav what={rightNav} />
@@ -83,9 +79,6 @@ export default function Meet() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="absolute overflow-hidden grid grid-flow-row gap-[10px] top-0 h-fit right-0 p-[10px]">
-                <Notification notification={notification} deleteAfterExpiryTime={deleteAfterExpiryTime} />
             </div>
         </div>
     )

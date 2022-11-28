@@ -8,6 +8,7 @@ import axios from "axios";
 import { useAuth } from "../context/auth-context";
 import { useNavigate } from "react-router-dom";
 import { setUserAvatar } from "../utils/generateAvatar";
+import { setToken } from "../axiosDefault";
 export default function Login() {
     const {user, setUser} = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -28,7 +29,6 @@ export default function Login() {
             if(resData.data.status){
                 if(setUser){
                     setUser(resData.data.success.data)
-                    setUserAvatar(resData.data.success.data.user)
                     navigate('/meet')
                 }
             }else{

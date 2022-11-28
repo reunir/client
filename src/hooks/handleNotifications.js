@@ -4,7 +4,7 @@ const useNotificationHandler = () => {
     const expiryTime = 5500; //Delete after 5.5 seconds
     const addNotification = (data) => {
         const theData = { ...data, timeOutId: setTimeout(() => {deleteAfterExpiryTime(notification.length)}, expiryTime), arrayIndex: notification.length }
-        console.log(theData);
+        // console.log(theData);
         setNotification([...notification, theData]);
     }
     const deleteAfterExpiryTime = (arrayIndex) => {

@@ -81,9 +81,9 @@ export default function Signup() {
                             }
                         </div>
                         <div className="grid ">
-                            <button disabled={avatarLoader} onClick={avatarCallback} class="px-5 py-2.5 relative rounded group overflow-hidden disabled:cursor-not-allowed font-medium bg-purple-50 text-purple-600 inline-block">
-                                <span class="absolute top-0 left-0 flex w-full h-0 mb-0 transition-all duration-200 ease-out transform translate-y-0 group-disabled:bg-purple-50 bg-purple-600 group-hover:h-full opacity-90"></span>
-                                <span class="relative grid grid-cols-[1fr_auto] gap-[5px] group-disabled:text-purple-600 group-hover:text-white">
+                            <button disabled={avatarLoader} onClick={avatarCallback} className="px-5 py-2.5 relative rounded group overflow-hidden disabled:cursor-not-allowed font-medium bg-purple-50 text-purple-600 inline-block">
+                                <span className="absolute top-0 left-0 flex w-full h-0 mb-0 transition-all duration-200 ease-out transform translate-y-0 group-disabled:bg-purple-50 bg-purple-600 group-hover:h-full opacity-90"></span>
+                                <span className="relative grid grid-cols-[1fr_auto] gap-[5px] group-disabled:text-purple-600 group-hover:text-white">
                                     Refresh
                                     {
                                         avatarLoader?
