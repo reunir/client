@@ -29,6 +29,7 @@ export default function Login() {
             if(resData.data.status){
                 if(setUser){
                     setUser(resData.data.success.data)
+                    setToken(resData.data.success.data.token)
                     navigate('/meet')
                 }
             }else{

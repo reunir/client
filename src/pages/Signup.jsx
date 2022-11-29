@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth-context";
 import { useForm } from "react-hook-form";
 import FormInfo from "../components/FormInfo";
@@ -20,18 +20,21 @@ export default function Signup() {
         setpercentageCompleted(parseInt((nextPart) / 1 * 100))
     }
     const { user , setUser} = useAuth();
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setshowPassword] = useState(false);
     const [avatar, setAvatar] = useState("");
     const [seed, setSeed] = useState("");
     const [stripe, setStripe] = useState("");
-    const [background, setBackground] = useState("");
+    const [backgroundColor, setBackground] = useState("");
     const formSubmit = (data, e) => {
         e.preventDefault();
-        axios.post('auth/register',{...data , seed,stripe,background}).then((resData) => {
-            console.log(resData)
+        axios.post('auth/register',{...data , seed,stripe,backgroundColor}).then((resData) => {
+            if(setUser){
+                setUser(resData.data.success.data)
+            }
+            navigate('/meet')
         }).catch((error) => {
-            console.log(error);
         })
     }
     const onError = (errors, e) => {
@@ -70,7 +73,7 @@ export default function Signup() {
                 </div>
                 <div className="grid mx-[20px] mb-[20px]">
                     <div className="grid place-self-center grid-rows-[1fr_auto] gap-[10px]">
-                        <div className={`grid w-[100px] h-[100px] rounded-full overflow-hidden bg-[${background}]`}>
+                        <div className={`grid w-[100px] h-[100px] rounded-full overflow-hidden bg-[${backgroundColor}]`}>
                             {
                                 avatarLoader?
                                 <div className="bg-gray-400 grid place-content-center">

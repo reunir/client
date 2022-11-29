@@ -1,11 +1,11 @@
 import { Video } from "@styled-icons/fluentui-system-filled";
 import randomstring from 'randomstring';
 import { useState,useEffect } from "react";
-import { sendRequest } from "../hooks/meetSocket";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import Loading from "../components/Loading";
 export default function HomeMeet() {
-    const [me,addNotification] = useOutletContext();
+    const [me,sendRequest] = useOutletContext();
+    const navigate = useNavigate();
     const generateMeetId = () => {
         const meetId = randomstring.generate({
             length: 3,
@@ -28,6 +28,8 @@ export default function HomeMeet() {
         const roomId = generateMeetId();
         setLoading(true);
         sendRequest("create",{roomId,userId:me._id,type:0})
+        setLoading(false);
+        navigate(`/meet/${roomId}`)
     }
     const [loading, setLoading] = useState(true);
     useEffect(() => {

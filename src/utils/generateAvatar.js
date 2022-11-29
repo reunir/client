@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { axiosExternal } from '../axiosDefault';
-import { privateGetRequest } from './privateAxios';
 
 const sprites = [
     'male',
