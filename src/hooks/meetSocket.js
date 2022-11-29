@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import socket from "../utils/socket";
 import useMeetDataHandler from "./meetDataHandler";
+
 const listenRequest = (event) => {
     socket.on(event,(args)=>{
         console.log(args);
@@ -32,4 +33,5 @@ const useMeetSocketServer = () => {
     
     return {me , sendRequest};
 }
+
 export default useMeetSocketServer;
