@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 
-export default function Video({participants}){
+export default function Video(){
+    
     useEffect(()=> {
         return(()=> {
 

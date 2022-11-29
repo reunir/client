@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const useMeetDataHandler = () => {
     const [allParticipants,setallParticipants] = useState(new Map());
+    const [participantCount,setParticipantCount] = useState(0);
+    const [meetId,setMeetId] = useState(null);
     const [pinnedParticipant,setPinnedParticipant] = useState(null);
     const [renderedParticipants, setRenderedParticipants] = useState(null);
     const [chats,setChats] = useState([{
@@ -27,9 +29,10 @@ const useMeetDataHandler = () => {
         timeAndDate: new Date()
     }]);
     const newParticipant = (data) => {
-        setallParticipants(alreadyParticipated => {
-           new Map([...alreadyParticipated,[data.socketId,data.userData]])
-        })
+        setallParticipants(
+           new Map([...allParticipants,[data.userData]])
+        )
+        setParticipantCount(data.participants);
     }
 
     const previousChat = (data) => {
@@ -37,12 +40,14 @@ const useMeetDataHandler = () => {
     }
 
     const newChat = (data) => {
-        setChats(curr=> [...curr, data]);
+        const newArr = [...chats,data];
+        setChats(newArr);
     }
 
     const removeParticipant = (socketId) => {
         const alreadyParticipated = allParticipants;
         setallParticipants(alreadyParticipated.delete(socketId));
+        setParticipantCount(participantCount-1);
     }
 
     const setPinnedParticipantHandler = (socketId) => {
@@ -52,7 +57,6 @@ const useMeetDataHandler = () => {
     const removePinnedParticipant = () => {
         setPinnedParticipant(null);
     }
-
-    return { chats, newChat,previousChat, newParticipant, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant }
+    return { chats, totalParticipants: participantCount, setParticipantCount , setMeetId, meetId, newChat,previousChat, newParticipant, removeParticipant, allParticipants, pinnedParticipant, setPinnedParticipantHandler, removePinnedParticipant }
 }
 export default useMeetDataHandler;
