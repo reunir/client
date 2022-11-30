@@ -1,34 +1,38 @@
 import { useState } from "react";
-    function  useStreamInit(){
-    const [error,setError] = useState(0);
-    const [videoTrack,setVideoTrack] = useState(true);
-    const [audioTrack,setAudioTrack] = useState(true);
-    const [localStream,setLocalStream] = useState(null);
-    const initStream = async (id) => {
-        if(navigator.mediaDevices){
-            await navigator.mediaDevices.getUserMedia({video: {
-                width: { min: 640, ideal: 1920, max: 1920 },
-                height: { min: 480, ideal: 1080, max: 1080 }
-              },
-              audio: true}).then((stream) => {
-                    setLocalStream(stream);
-                    setVideoTrack(true)
-                    setAudioTrack(true)
-                    document.getElementById(id).srcObject = stream;
-                    document.getElementById(id).volume = 0;
-                    document.getElementById(id).muted = 0;
-                    setError(0);
-              }).catch((err)=> {
-                console.error(err);
-                setVideoTrack(false)
-                setAudioTrack(false)
-                setError(1);
-              })
-            }else{
-                setError(1);
-                setVideoTrack(false)
-                setAudioTrack(false)
-            }
+function useStreamInit() {
+  const [error, setError] = useState(0);
+  const [videoTrack, setVideoTrack] = useState(true);
+  const [audioTrack, setAudioTrack] = useState(true);
+  const [localStream, setLocalStream] = useState(null);
+  const initStream = async (id) => {
+    if (navigator.mediaDevices) {
+      await navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            width: { min: 640, ideal: 1920, max: 1920 },
+            height: { min: 480, ideal: 1080, max: 1080 },
+          },
+          audio: true,
+        })
+        .then((stream) => {
+          setLocalStream(stream);
+          setVideoTrack(true);
+          setAudioTrack(true);
+          document.getElementById(id).srcObject = stream;
+          document.getElementById(id).volume = 0;
+          document.getElementById(id).muted = 0;
+          setError(0);
+        })
+        .catch((err) => {
+          console.error(err);
+          setVideoTrack(false);
+          setAudioTrack(false);
+          setError(1);
+        });
+    } else {
+      setError(1);
+      setVideoTrack(false);
+      setAudioTrack(false);
     }
   };
   const finishStream = () => {
@@ -48,6 +52,7 @@ import { useState } from "react";
       setVideoTrack(true);
     }
   };
+
   const toggleAudio = async () => {
     let localaudioTrack = localStream
       .getTracks()
@@ -59,15 +64,26 @@ import { useState } from "react";
       localaudioTrack.enabled = true;
       setAudioTrack(false);
     }
-    const createOffer = async () => {
-        let peerConnection = new RTCPeerConnection();
-        let remoteStream = new MediaStream();
-        // video tag
-        let offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
-        console.log(offer);
-    }
-    return {initStream,finishStream,localStream,createOffer,error,videoTrack,audioTrack,toggleAudio,toggleCamera}
+  };
+  const createOffer = async () => {
+    let peerConnection = new RTCPeerConnection();
+    let remoteStream = new MediaStream();
+    // video tag
+    let offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+    console.log(offer);
+  };
+  return {
+    initStream,
+    finishStream,
+    localStream,
+    createOffer,
+    error,
+    videoTrack,
+    audioTrack,
+    toggleAudio,
+    toggleCamera,
+  };
 }
 
 export default useStreamInit;
