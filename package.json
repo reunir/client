@@ -25,6 +25,7 @@
     "react-spinners": "^0.13.6",
     "socket.io-client": "^4.5.1",
     "use-clippy": "^1.0.9",
+    "uuidv4": "^6.2.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

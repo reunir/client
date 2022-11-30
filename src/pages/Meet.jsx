@@ -19,7 +19,7 @@ export default function Meet() {
     if (user === undefined) {
         useNavigate("/login")
     }
-    const [me, addNotification, participants, sendRequest, totalParticipants, newParticipant, myPeer] = useOutletContext();
+    const [me, addNotification, participants, sendRequest, totalParticipants, newParticipant, peerId] = useOutletContext();
     const { id } = useParams();
     const [loading,setLoading] = useState(true);
     const [rightNav, setRightNav] = useState(0);
@@ -31,16 +31,16 @@ export default function Meet() {
     }
     const { error, videoTrack, createOffer, localStream, audioTrack, initStream, finishStream, toggleAudio, toggleCamera } = useStreamInit();
     useEffect(() => {
-        if(me != {} && myPeer!=null ){
-            console.log(myPeer);
-            sendRequest("join_room", { roomId: id, userId: me._id, peerId: myPeer._id });
+        if(me != {} && peerId!=null ){
+            console.log(peerId);
+            sendRequest("join_room", { roomId: id, userId: me._id, peerId });
             initStream(`${me._id}-video`);
             setLoading(false);
         }
         return () => {
             finishStream();
         }
-    }, [myPeer])
+    }, [])
     return (
         loading?
         <Loading/>

@@ -15,6 +15,7 @@ const sendRequest = (event, data) => {
 }
 
 const generateNewParticipantComponent = (localStream,id) => {
+    console.log("here!")
     if(!document.contains(document.getElementById(id+'-video'))){
         const video = document.createElement('video');
         video.id = id+'-video'
@@ -44,14 +45,12 @@ const useMeetSocketServer = (addNotification,myPeer,me) => {
         })
         socket.on("successful_join",({totalParticipants,admin,peerId,userId}) => {
             setParticipantCount(totalParticipants);
-                console.log(peerId)
-                myPeer.on("call",(call) => {
-                    if(call){   
-                        call.on("stream" , (remoteStream) => {
+            myPeer.on("call",(call) => {  
+                call.on("stream" , (remoteStream) => {
+                            console.log(remoteStream)
                             generateNewParticipantComponent(remoteStream,userId)
                         });
                         call.answer(document.getElementById(me._id+'-video').srcObject);
-                    }
             })
             // myPeer.on("connection",(conn) => {
             //     conn.on("data",(data) => {
@@ -64,8 +63,8 @@ const useMeetSocketServer = (addNotification,myPeer,me) => {
             // addNotification({ status: 1, error: {}, success: { data: "", message: `${args.userData.firstName} joined` } })
             newParticipant(args.userData);
         const remotePeerCall = myPeer.call(args.peerId,document.getElementById(me._id+'-video').srcObject);
-                console.log(remotePeerCall)
-                remotePeerCall.on("stream",(remoteStream) => {
+        remotePeerCall.on("stream",(remoteStream) => {
+                    console.log(remoteStream)
                     generateNewParticipantComponent(remoteStream,args.userId)
                 })
             // console.log(args.peerId);
