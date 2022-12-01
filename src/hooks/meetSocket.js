@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import socket from "../utils/socket";
 import useMeetDataHandler from "./meetDataHandler";
+import { v4 as uuidv4 } from 'uuid'
 
 const listenRequest = (event) => {
   socket.on(event, (args) => {
@@ -17,7 +18,12 @@ const sendRequest = (event, data) => {
 };
 
 const generateNewParticipantComponent = (localStream, id) => {
-  if (!document.contains(document.getElementById(id + "-video"))) {
+  if (document.contains(document.getElementById(id + "-video"))) {
+    document.getElementById(id + "-video").remove()
+  }
+
+  // if (!document.contains(document.getElementById(id + "-video"))) {
+
     const video = document.createElement("video");
     video.id = id + "-video";
     video.autoplay = true;
@@ -25,7 +31,7 @@ const generateNewParticipantComponent = (localStream, id) => {
     video.controls = false;
     const parent = document.getElementById("users-stream");
     parent.appendChild(video);
-  }
+  // }
 };
 
 const useMeetSocketServer = (addNotification, peerId, me) => {
@@ -63,19 +69,28 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
       ({ totalParticipants, admin, peerId, userId }) => {
         setParticipantCount(totalParticipants);
         console.log(peerId);
+
+        let rStream
         myPeer.on("call", (call) => {
-          call.answer(document.getElementById(me._id + "-video").srcObject);
+            call.answer(document.getElementById(me._id + "-video").srcObject);
             call.on("stream", (remoteStream) => {
-              // console.log()
-              generateNewParticipantComponent(remoteStream, "gvgggvhjvjh");
+              console.log(remoteStream);
+              rStream = remoteStream
+
+              // checks if the incoming stream is streaming(unmute) or not (mute)
+              remoteStream.getVideoTracks()[0].addEventListener("mute", () => {
+                console.log("video muted")
+              })
             });
             
         });
-        // myPeer.on("connection",(conn) => {
-        //     conn.on("data",(data) => {
-        //         console.log(data)
-        //     })
-        // })
+
+        myPeer.on("connection", (conn) => {
+          conn.on("data", data => {
+            console.log(data)
+            generateNewParticipantComponent(rStream, data.userId);
+          })
+        })
       }
     );
     socket.on("user_connected", (args) => {
@@ -83,20 +98,26 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
       setParticipantCount(args.totalParticipants);
       // addNotification({ status: 1, error: {}, success: { data: "", message: `${args.userData.firstName} joined` } })
       newParticipant(args.userData);
-      const remotePeerCall = myPeer.call(
-        args.peerId,
-        document.getElementById(me._id + "-video").srcObject
-      );
-      console.log(remotePeerCall);
+
+      // userId of user joined
+      console.log(args.userId)
+
+      const remotePeer = myPeer.connect(args.peerId)
+
+      const remotePeerCall = myPeer.call(args.peerId, document.getElementById(me._id + "-video").srcObject)
+      
       remotePeerCall.on("stream", (remoteStream) => {
         console.log(remoteStream.id);
-        generateNewParticipantComponent(remoteStream, 'erbwerb');
+        generateNewParticipantComponent(remoteStream, args.userId);
       });
-      // console.log(args.peerId);
-      // const remotePeerCall = myPeer.connect(args.peerId);
-      // remotePeerCall.on("open",() => {
-      //     remotePeerCall.send("hi!!");
-      // })
+
+      // connect for sending data
+      remotePeer.on("open", () => {
+        remotePeer.send({
+          userId: me._id
+        })
+      })
+
     });
   }, []);
   return { totalParticipants, newParticipant };

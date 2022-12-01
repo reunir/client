@@ -14,6 +14,7 @@ import Avatar from "../components/Avatar";
 import ShareDetails from "../components/ShareDetails";
 import { MeetContext, MeetProvider } from "../context/meet-context";
 import Loading from "../components/Loading";
+
 export default function Meet() {
   const { user } = useAuth();
   if (user === undefined) {
@@ -51,7 +52,8 @@ export default function Meet() {
       console.log(peerId);
       sendRequest("join_room", {
         roomId: id,
-        peerId: peerId
+        peerId: peerId,
+        userId: me._id,
       });
       initStream(`${me._id}-video`);
       setLoading(false);
