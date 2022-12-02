@@ -27,6 +27,10 @@ const generateNewAvatar = async () => {
         const avatar = await axios.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%23${randomColor}`);
         return {avatar:avatar.data,stripe,seed,randomColor};
 }
+const generateAndReturnAvatar = async (stripe,seed,backgroundColor) => {
+    const avatar = await axiosExternal.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%23${backgroundColor}`);
+    return avatar;
+}
 const getUserAvatar = () => {
     return sessionStorage.getItem(window.btoa("reunir-user-avatar")) || "";
 }
@@ -34,4 +38,4 @@ const setUserAvatar = async ({stripe,seed,backgroundColor}) => {
     const avtr = await axiosExternal.get(`https://avatars.dicebear.com/api/${stripe}/${seed}.svg?background=%23${backgroundColor}`)
     sessionStorage.setItem(window.btoa("reunir-user-avatar"),avtr.data);
 }
-export {generateNewAvatar,getUserAvatar,setUserAvatar}
+export {generateNewAvatar,getUserAvatar,setUserAvatar, generateAndReturnAvatar}

@@ -5,14 +5,28 @@ import { ArrowReply } from "@styled-icons/fluentui-system-filled";
 import React from "react";
 import { MeetContext } from "../../../context/meet-context";
 import useMeetDataHandler from "../../../hooks/meetDataHandler";
+import { generateAndReturnAvatar, getUserAvatar } from "../../../utils/generateAvatar";
+import axios from "axios";
+import parse from 'html-react-parser'
 export default function Chat(){
     useEffect(() => {
         return () => {
         }
       }, [])
-    let {sendRequest} = React.useContext(MeetContext);
-    const {chats,newChat} = useMeetDataHandler();
+    let {sendRequest,me,chats,newChat} = React.useContext(MeetContext);
     const [replyTo,setReplyTo] = useState(-1);
+    const userAvatar = (email) => {
+        axios.post("user/getDetails",{email}).then((res) => {
+            const user = res.data.success.message[0];
+            generateAndReturnAvatar(user.stripe,user.seed,user.backgroundColor).then((avatar) => {
+                console.log(avatar.data)
+                return avatar.data;
+            })
+
+        }).catch((err) => {
+            return '<div></div>';
+        })
+    }
     const convertToLocale = (date) => {
         return dateFormat(date,'shortTime');
     }
@@ -20,9 +34,13 @@ export default function Chat(){
         let message = document.getElementById('newChat').value;
         if(message!==''){
         newChat({
-            senderName: 'Chitwan Bindal',
-            senderProfile:'',
-            senderEmail:'chitwan001@gmail.com',
+            senderName: me.firstName+' '+me.lastName,
+            senderProfile:{
+                seed:me.seed,
+                stripe: me.stripe,
+                backgroundColor: me.backgroundColor
+            },
+            senderEmail: me.email,
             text: message,
             inReplyTo: replyTo,
             reacts: [],
@@ -31,9 +49,13 @@ export default function Chat(){
             timeAndDate: new Date()
         })
         sendRequest("send_chat",{
-            senderName: 'Chitwan Bindal',
-            senderProfile:'',
-            senderEmail:'chitwan001@gmail.com',
+            senderName: me.firstName+' '+me.lastName,
+            senderProfile:{
+                seed:me.seed,
+                stripe: me.stripe,
+                backgroundColor: me.backgroundColor
+            },
+            senderEmail: me.email,
             text: message,
             inReplyTo: replyTo,
             reacts: [],
@@ -49,15 +71,15 @@ export default function Chat(){
         }
     }
     return(
-        <div className="w-[400px] grid grid-rows-[auto_1fr] h-full pt-[50px]">
+        <div className="w-[400px] grid grid-rows-[auto_1fr] h-full mt-[10px] mr-[10px] border rounded-md bg-gray-200 border-gray-400">
             <div className={`overflow-y-scroll ${replyTo===-1?'h-[615px]':'h-[605px]'} grid`} id="chat-scrollbar">
                 <div className="h-fit relative self-end pr-[10px]">
                 <div className="grid bottom-0 left-0 w-full">
                     {chats.map((chat,id)=>(
-                        chat.senderEmail!=='chitwan001@gmail.com'?
+                        chat.senderEmail!==me.email?
                         <div key={id} className={`grid group grid-cols-[30px_auto_auto] gap-[10px] w-full place-content-start ${id===0?'pt-0':chats[id-1].senderEmail===chat.senderEmail?'pt-[4px]':'pt-[10px]'}`}>
-                            <div className={` place-self-center place-content-center w-[30px] h-[30px] rounded-lg bg-violet-700 text-white text-sm ${id===0?'grid':chats[id-1].senderEmail===chat.senderEmail?'hidden':'grid'}`}>
-                                AS
+                            <div className={` place-self-center overflow-hidden w-[30px] h-[30px] rounded-lg ${id===0?'grid':chats[id-1].senderEmail===chat.senderEmail?'hidden':'grid'}`}>
+                                {userAvatar(chat.senderEmail)}
                             </div>
                             <div className="break-words bg-slate-300 select-text dark:bg-gray-900 px-[10px] py-[5px] rounded-xl rounded-bl-none grid text-left text-gray-900 dark:text-slate-300 w-fit max-w-[250px]">
                                 {
@@ -98,8 +120,8 @@ export default function Chat(){
                                 }
                                 {chat.text}
                             </div>
-                            <div className={` place-self-center place-content-center w-[30px] h-[30px] rounded-lg bg-green-600 text-white text-sm ${id===0?'grid':chats[id-1].senderEmail===chat.senderEmail?'hidden':'grid'}`}>
-                                CB
+                            <div className={` place-self-center overflow-hidden w-[30px] h-[30px] rounded-lg text-sm ${id===0?'grid':chats[id-1].senderEmail===chat.senderEmail?'hidden':'grid'}`}>
+                                {parse(getUserAvatar())}
                             </div>
                         </div>
                     ))}

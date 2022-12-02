@@ -34,7 +34,13 @@ export default function Me({me}) {
                 <>
                     <Outlet context={[me, addNotification]} />
                     <div className="absolute overflow-hidden grid grid-flow-row gap-[10px] top-0 h-fit right-0 p-[10px]">
-                        {/* <Notification notification={notification} deleteAfterExpiryTime={deleteAfterExpiryTime} /> */}
+                        {
+                            notification.length!=0?
+                            // <Notification notification={notification} deleteAfterExpiryTime={deleteAfterExpiryTime} />
+                            ''
+                            :
+                            ''
+                        }
                     </div>
                 </>
             }

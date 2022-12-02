@@ -7,27 +7,7 @@ const useMeetDataHandler = () => {
     const [meetId,setMeetId] = useState(null);
     const [pinnedParticipant,setPinnedParticipant] = useState(null);
     const [renderedParticipants, setRenderedParticipants] = useState(null);
-    const [chats,setChats] = useState([{
-        senderName: 'Abhinav Sinha',
-        senderProfile: '',
-        senderEmail:'abhinavvsinhaa@gmail.com',
-        text: 'Hi there!',
-        inReplyTo: -1,
-        reacts: [],
-        type: 'text',
-        language: 'en-US',
-        timeAndDate: new Date()
-    },{
-        senderName: 'Chitwan Bindal',
-        senderProfile: '',
-        senderEmail:'chitwan001@gmail.com',
-        text: 'Hello Abhinav!',
-        inReplyTo: 0,
-        reacts: [],
-        type: 'text',
-        language: 'en-US',
-        timeAndDate: new Date()
-    }]);
+    const [chats,setChats] = useState([]);
     const newParticipant = (data) => {
         setallParticipants(
            new Map([...allParticipants,[data.userData]])
@@ -40,8 +20,8 @@ const useMeetDataHandler = () => {
     }
 
     const newChat = (data) => {
-        const newArr = [...chats,data];
-        setChats(newArr);
+        console.log(data);
+        setChats(chats => chats.concat(data));
     }
 
     const removeParticipant = (socketId) => {
