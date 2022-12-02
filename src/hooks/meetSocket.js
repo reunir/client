@@ -48,7 +48,7 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
     previousChat,
   } = useMeetDataHandler();
 
-  const myPeer = new Peer(peerId)
+  const myPeer = new Peer(peerId) 
 
   useEffect(() => {
     // addNotification({ status: 1, error: {}, success: { data: "", message: "Hi there it is a notification!" } });=
