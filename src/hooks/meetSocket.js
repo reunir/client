@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import socket from "../utils/socket";
 import useMeetDataHandler from "./meetDataHandler";
-import { v4 as uuidv4 } from 'uuid'
+import "./video.css"
 
 const listenRequest = (event) => {
   socket.on(event, (args) => {
@@ -22,16 +22,14 @@ const generateNewParticipantComponent = (localStream, id) => {
     document.getElementById(id + "-video").remove()
   }
 
-  // if (!document.contains(document.getElementById(id + "-video"))) {
-
     const video = document.createElement("video");
     video.id = id + "-video";
+    video.className = "renderVideo"
     video.autoplay = true;
     video.srcObject = localStream;
     video.controls = false;
     const parent = document.getElementById("users-stream");
     parent.appendChild(video);
-  // }
 };
 
 const useMeetSocketServer = (addNotification, peerId, me) => {
@@ -70,7 +68,7 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
         setParticipantCount(totalParticipants);
         console.log(peerId);
 
-        let rStream
+        let rStream;
         myPeer.on("call", (call) => {
             call.answer(document.getElementById(me._id + "-video").srcObject);
             call.on("stream", (remoteStream) => {
@@ -82,9 +80,9 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
                 console.log("video muted")
               })
             });
-            
         });
 
+        // get userId from all connected users and create the video element with userId as id
         myPeer.on("connection", (conn) => {
           conn.on("data", data => {
             console.log(data)
@@ -119,6 +117,14 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
       })
 
     });
+
+    socket.on("user_disconnected", args => {
+      console.log(args);
+
+      // on disconne
+      document.getElementById(`${args.userId}-video`).remove()
+    })
+
   }, []);
   return { totalParticipants, newParticipant };
 };
