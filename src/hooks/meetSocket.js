@@ -19,6 +19,7 @@ const generateNewParticipantComponent = (localStream, id) => {
   if (!document.contains(document.getElementById(id + "-video"))) {
     const video = document.createElement("video");
     video.id = id + "-video";
+    video.width = 640;
     video.autoplay = true;
     video.srcObject = localStream;
     video.controls = false;

@@ -82,7 +82,7 @@ export default function Meet() {
           <Avatar />
         </div>
       </div>
-      <MeetProvider value={{ localStream, chats, newChat, sendRequest, participants, me }}>
+      <MeetProvider value={{ localStream, chats, newChat, totalParticipants, sendRequest, participants, me }}>
         <div className="grid h-[calc(100%-140px)] lg:h-[calc(100%-180px)] gap-[10px] grid-cols-[1fr_auto]">
           <MainVideo
             videoTrack={videoTrack}
