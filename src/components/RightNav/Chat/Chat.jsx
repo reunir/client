@@ -13,7 +13,7 @@ export default function Chat(){
         return () => {
         }
       }, [])
-    let {sendRequest,chats,newChat} = React.useContext(MeetContext);
+    let {sendRequest,chats,newChat,me, id} = React.useContext(MeetContext);
     const [replyTo,setReplyTo] = useState(-1);
     const convertToLocale = (date) => {
         return dateFormat(date,'shortTime');
@@ -49,6 +49,7 @@ export default function Chat(){
                 timeAndDate: new Date()
             })
             sendRequest("send_chat",{
+                roomId: id,
                 senderName: me.firstName+' '+me.lastName,
                 senderProfile:{
                     seed:me.seed,
@@ -76,7 +77,7 @@ export default function Chat(){
                 <div className="h-fit relative self-end pr-[10px]">
                 <div className="grid bottom-0 left-0 w-full">
                     {chats.map((chat,id)=>(
-                        chat.senderEmail!=='chitwan001@gmail.com'?
+                        chat.senderEmail!==me.email?
                         <div key={id} className={`grid group grid-cols-[30px_auto_auto] gap-[10px] w-full place-content-start ${id===0?'pt-0':chats[id-1].senderEmail===chat.senderEmail?'pt-[4px]':'pt-[10px]'}`}>
                             <div className={` place-self-center place-content-center w-[30px] h-[30px] rounded-lg overflow-hidden text-sm ${id===0?'grid':chats[id-1].senderEmail===chat.senderEmail?'hidden':'grid'}`}>
                                 {userAvatar(chat.senderEmail)}

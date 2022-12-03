@@ -70,7 +70,8 @@ export default function Meet() {
 
         </div>
         <div>
-          <p id="transcript"></p>
+          <p id="transcript" className="dark:text-white text-gray-400 text-base pt-[10px]">
+          </p>
         </div>
         <div className="grid">
           <ShareDetails addNotification={addNotification} id={id} />
@@ -82,7 +83,7 @@ export default function Meet() {
           <Avatar />
         </div>
       </div>
-      <MeetProvider value={{ localStream, chats, newChat, sendRequest, allParticipants, me }}>
+      <MeetProvider value={{ localStream, chats, newChat, sendRequest, allParticipants, me, id }}>
         <div className="grid h-[calc(100%-140px)] lg:h-[calc(100%-180px)] gap-[10px] grid-cols-[1fr_auto]">
           <MainVideo
             videoTrack={videoTrack}

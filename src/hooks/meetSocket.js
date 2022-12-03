@@ -91,11 +91,8 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
   recognition.continuous = true
   
   useEffect(() => {
-<<<<<<< HEAD
-=======
     recognition.start();
     // addNotification({ status: 1, error: {}, success: { data: "", message: "Hi there it is a notification!" } });=
->>>>>>> b31da33542c7a7103c82d27c01011e1651d8b21d
     socket.on("removeparticipant", (args) => {
       removeParticipant(args.socketId);
     });
