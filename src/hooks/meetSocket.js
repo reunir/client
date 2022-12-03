@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import socket from "../utils/socket";
 import useMeetDataHandler from "./meetDataHandler";
 import "./video.css"
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const listenRequest = (event) => {
   socket.on(event, (args) => {
@@ -74,7 +73,7 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
     });
     socket.on(
       "successful_join",
-      ({ totalParticipants, admin, peerId, userId }) => {
+      ({ totalParticipants, admin, peerId, userId, roomId }) => {
         setParticipantCount(totalParticipants);
         console.log(peerId);
 
@@ -102,15 +101,19 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
                 Object.keys(e.results).map(element => {
                   Object.keys(e.results[element]).map(ele => {
                     console.log(e.results[element][ele].transcript)
+                    transcript += e.results[element][ele].transcript
                   })
                 })
                 // e.results.forEach(element => {
                 //   console.log(element)
                 // });
-                transcript
-                socket.emit("recognition", {
-                  transcript
-                })
+                if (transcript != "") {
+                  socket.emit("recognition", {
+                    transcript,
+                    roomId,
+                    userId
+                  })
+                }
 
                 // e.results = []
 
@@ -178,6 +181,12 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
       document.getElementById(`${args.userId}-video`).remove()
     })
 
+    socket.on("recieved_caption", args => {
+      if (args.caption != "") {
+        document.getElementById("transcript").innerHTML = args.caption
+        console.log(args)
+      }
+    })
   }, []);
   return { totalParticipants, newParticipant };
 };

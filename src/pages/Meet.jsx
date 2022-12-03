@@ -70,7 +70,9 @@ export default function Meet() {
         <div className="grid place-content-center font-inter font-medium dark:text-gray-100 text-4xl text-gray-700">
           reunir
         </div>
-        <div></div>
+        <div>
+          <p id="transcript"></p>
+        </div>
         <div className="grid">
           <ShareDetails addNotification={addNotification} id={id} />
         </div>
