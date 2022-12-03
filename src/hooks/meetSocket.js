@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import socket from "../utils/socket";
 import useMeetDataHandler from "./meetDataHandler";
 import "./video.css"
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const listenRequest = (event) => {
   socket.on(event, (args) => {
@@ -50,7 +51,16 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
 
   const myPeer = new Peer(peerId) 
 
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  let recognition = new SpeechRecognition();
+       
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.continuous = true
+  
   useEffect(() => {
+    recognition.start();
     // addNotification({ status: 1, error: {}, success: { data: "", message: "Hi there it is a notification!" } });=
     socket.on("removeparticipant", (args) => {
       removeParticipant(args.socketId);
@@ -79,6 +89,49 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
               remoteStream.getVideoTracks()[0].addEventListener("mute", () => {
                 console.log("video muted")
               })
+
+              recognition.addEventListener('speechstart', () => {
+                console.log('Speech has been detected.');
+              });
+              
+              recognition.addEventListener('result', (e) => {
+                console.log('Result has been detected.');
+              
+                let transcript = ""
+                // console.log(e.results)
+                Object.keys(e.results).map(element => {
+                  Object.keys(e.results[element]).map(ele => {
+                    console.log(e.results[element][ele].transcript)
+                  })
+                })
+                // e.results.forEach(element => {
+                //   console.log(element)
+                // });
+                transcript
+                socket.emit("recognition", {
+                  transcript
+                })
+
+                // e.results = []
+
+                // console.log(text)
+              
+                // outputYou.textContent = text;
+                // console.log('Confidence: ' + e.results[0][0].confidence);
+              
+                // socket.emit('chat message', text);
+              });
+
+              recognition.addEventListener("speechend", (e) => {
+                recognition.start()
+              })
+              
+              recognition.addEventListener('error', (e) => {
+                recognition.start()
+              });
+
+              
+            
             });
         });
 
