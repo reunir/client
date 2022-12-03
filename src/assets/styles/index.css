@@ -35,3 +35,26 @@ body {
       monospace;
   }
   
+#chat-scrollbar::-webkit-scrollbar{
+  display: none;
+}
+#stacked-participants>div:nth-child(1){
+  display: grid !important;
+  bottom: 0;
+  z-index: 4;
+}
+#stacked-participants>div:nth-child(2){
+  display: grid;
+  bottom: 20%;
+  z-index: 3;
+}
+#stacked-participants>div:nth-child(3){
+  display: grid;
+  bottom: 40%;
+  z-index: 2;
+}
+#stacked-participants>div:nth-child(4){
+  display: grid;
+  bottom: 60%;
+  z-index: 1;
+}

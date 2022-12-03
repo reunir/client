@@ -1,5 +1,7 @@
 import { Camera, CameraOff, Mic, MicOff } from "@styled-icons/fluentui-system-filled";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { disconnectSocket } from "../hooks/meetSocket";
 import useStreamInit from "../hooks/userStream";
 
 export default function VideoControls({error,toggleAudio,toggleCamera}){
@@ -12,12 +14,17 @@ export default function VideoControls({error,toggleAudio,toggleCamera}){
             setVideoStatus('off')
         toggleCamera()
     }
+    const navigate = useNavigate();
     const toggleMicState = () => {
         if(micStatus==='off')
             setMicStatus('on')
         else
             setMicStatus('off')
         toggleAudio()
+    }
+    const leaveCall = () => {
+        disconnectSocket();
+        navigate('/meet');
     }
     return(
         <div className="grid place-content-center">
@@ -31,7 +38,7 @@ export default function VideoControls({error,toggleAudio,toggleCamera}){
                     }
                 </button>
                 <div className="grid grid-flow-col place-content-center w-[150px] h-[60px] font-medium dark:bg-red-700 bg-red-800 rounded-lg text-xl text-white">
-                    <div className="grid place-content-center place-self-start">
+                    <div onClick={leaveCall} className="grid place-content-center place-self-start">
                         Leave call
                     </div>
                 </div>

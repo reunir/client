@@ -8,7 +8,7 @@ import MainVideo from "../components/Video/MainVideo";
 import VideoControls from "../components/VideoControls";
 import useStreamInit from "../hooks/userStream";
 import { useEffect } from "react";
-import { sendRequest } from "../hooks/meetSocket";
+import { disconnectSocket, sendRequest } from "../hooks/meetSocket";
 import { useAuth } from "../context/auth-context";
 import Avatar from "../components/Avatar";
 import ShareDetails from "../components/ShareDetails";
@@ -17,17 +17,15 @@ import Loading from "../components/Loading";
 
 export default function Meet() {
   const { user } = useAuth();
-  if (user === undefined) {
-    useNavigate("/login");
-  }
   const [
     me,
     addNotification,
-    participants,
+    allParticipants,
     sendRequest,
     totalParticipants,
     newParticipant,
     peerId,
+    chats,newChat
   ] = useOutletContext();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -60,6 +58,7 @@ export default function Meet() {
     }
     return () => {
       finishStream();
+      disconnectSocket()
     };
   }, []);
   return loading ? (
@@ -67,8 +66,8 @@ export default function Meet() {
   ) : (
     <div className="bg-[#f0f0f0] dark:bg-gray-800 relative">
       <div className="static grid grid-flow-col pr-[10px] lg:pr-0 lg:grid-cols-[3fr_11fr_1fr_1fr_1fr] grid-cols-[2fr_1fr_1fr] top-0 left-0 w-full lg:h-[80px] h-[60px] bg-slate-100 dark:bg-gray-700">
-        <div className="grid place-content-center font-inter font-medium dark:text-gray-100 text-4xl text-gray-700">
-          reunir
+        <div>
+
         </div>
         <div></div>
         <div className="grid">
@@ -81,7 +80,7 @@ export default function Meet() {
           <Avatar />
         </div>
       </div>
-      <MeetProvider value={{ localStream, sendRequest, participants, me }}>
+      <MeetProvider value={{ localStream, chats, newChat, sendRequest, allParticipants, me }}>
         <div className="grid h-[calc(100%-140px)] lg:h-[calc(100%-180px)] gap-[10px] grid-cols-[1fr_auto]">
           <MainVideo
             videoTrack={videoTrack}
@@ -128,6 +127,11 @@ export default function Meet() {
             </div>
             <div className="">Participants {totalParticipants}</div>
           </div>
+        </div>
+        <div className="absolute left-[10px] bottom-[20px]">
+        <div className="grid place-content-center font-inter font-normal dark:text-gray-300 text-2xl text-gray-700">
+          reunir
+        </div>
         </div>
       </div>
     </div>

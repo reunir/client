@@ -10,7 +10,7 @@ export default function MeetNav() {
   const [ me, addNotification ] = useOutletContext();
   const [ loading, setLoading ] = useState(true);
   const [ peerId, setPeerId ] = useState(uuid())
-  const { totalParticipants, newParticipant } = useMeetSocketServer(
+  const { totalParticipants, newParticipant,chats,newChat,allParticipants } = useMeetSocketServer(
     addNotification,
     peerId,
     me
@@ -18,10 +18,6 @@ export default function MeetNav() {
   useEffect(() => {
     setLoading(false);
   }, []);
-  const participants = [
-    { id: "abhinavvsinhaa@gmail.com", name: "Abhinav Sinha" },
-    { id: "armaanbgp@gmail.com", name: "Rhythm Shandlya" },
-  ];
   return (
     <>
       {loading ? (
@@ -31,11 +27,13 @@ export default function MeetNav() {
           context={[
             me,
             addNotification,
-            participants,
+            allParticipants,
             sendRequest,
             totalParticipants,
             newParticipant,
             peerId,
+            chats,
+            newChat
           ]}
         />
       )}
