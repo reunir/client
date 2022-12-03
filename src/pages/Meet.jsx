@@ -69,7 +69,9 @@ export default function Meet() {
         <div>
 
         </div>
-        <div></div>
+        <div>
+          <p id="transcript"></p>
+        </div>
         <div className="grid">
           <ShareDetails addNotification={addNotification} id={id} />
         </div>

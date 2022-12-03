@@ -82,7 +82,20 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
 
   const myPeer = new Peer(peerId) 
 
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  let recognition = new SpeechRecognition();
+       
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.continuous = true
+  
   useEffect(() => {
+<<<<<<< HEAD
+=======
+    recognition.start();
+    // addNotification({ status: 1, error: {}, success: { data: "", message: "Hi there it is a notification!" } });=
+>>>>>>> b31da33542c7a7103c82d27c01011e1651d8b21d
     socket.on("removeparticipant", (args) => {
       removeParticipant(args.socketId);
     });
@@ -95,7 +108,7 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
     });
     socket.on(
       "successful_join",
-      ({ totalParticipants, admin, peerId, userId }) => {
+      ({ totalParticipants, admin, peerId, userId, roomId }) => {
         setParticipantCount(totalParticipants);
         console.log(peerId);
 
@@ -110,6 +123,53 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
               remoteStream.getVideoTracks()[0].addEventListener("mute", () => {
                 console.log("video muted")
               })
+
+              recognition.addEventListener('speechstart', () => {
+                console.log('Speech has been detected.');
+              });
+              
+              recognition.addEventListener('result', (e) => {
+                console.log('Result has been detected.');
+              
+                let transcript = ""
+                // console.log(e.results)
+                Object.keys(e.results).map(element => {
+                  Object.keys(e.results[element]).map(ele => {
+                    console.log(e.results[element][ele].transcript)
+                    transcript += e.results[element][ele].transcript
+                  })
+                })
+                // e.results.forEach(element => {
+                //   console.log(element)
+                // });
+                if (transcript != "") {
+                  socket.emit("recognition", {
+                    transcript,
+                    roomId,
+                    userId
+                  })
+                }
+
+                // e.results = []
+
+                // console.log(text)
+              
+                // outputYou.textContent = text;
+                // console.log('Confidence: ' + e.results[0][0].confidence);
+              
+                // socket.emit('chat message', text);
+              });
+
+              recognition.addEventListener("speechend", (e) => {
+                recognition.start()
+              })
+              
+              recognition.addEventListener('error', (e) => {
+                recognition.start()
+              });
+
+              
+            
             });
         });
 
@@ -161,6 +221,12 @@ const useMeetSocketServer = (addNotification, peerId, me) => {
       removeRenderedParticipant(args.userId);
     })
 
+    socket.on("recieved_caption", args => {
+      if (args.caption != "") {
+        document.getElementById("transcript").innerHTML = args.caption
+        console.log(args)
+      }
+    })
   }, []);
   return { totalParticipants, newParticipant,chats,newChat,allParticipants };
 };
